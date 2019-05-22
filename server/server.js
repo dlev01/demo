@@ -28,16 +28,14 @@ app.post(
     redis.get(JSON.stringify(req.body), (err, result) => {
       if (err) {
         console.log("~~ERROR~~ in redis.get: ", err);
-        return next();
-      } else if (result === null) {
-        console.log("==NULL== in redis.get");
-        resp.locals.query = JSON.stringify(req.body);
-        return next();
-      } else {
+      } else if (result) {
         console.log("++RESULT++ in redis.get");
         resp.locals.result = JSON.parse(result);
-        return next();
+      } else {
+        console.log("==NULL== in redis.get");
+        resp.locals.query = JSON.stringify(req.body);
       }
+      next();
     });
   },
   (req, resp, next) => {
