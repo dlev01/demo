@@ -10,9 +10,7 @@
             </h1>
             <span class="align-bottom">{{subtitle}}</span>
           </div>
-
           <hr>
-
           <router-view/>
         </b-col>
       </b-row>

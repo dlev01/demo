@@ -1,13 +1,11 @@
 <template>
   <div class="search-page">
     <search-bar></search-bar>
-
-
     <ul v-if="search.business">
       <li v-for="business in search.business">
         <br><b>{{business.name}}</b> {{business.rating}} ☆ </br>
-        <br>{{business.reviews[0].text}} {{business.reviews[0].rating}} ☆</br>
-        <br>{{business.reviews[1].text}} {{business.reviews[1].rating}} ☆</br>
+        <br>{{business.reviews[0].text}} {{business.reviews[0].rating}} ☆ </br>
+        <br>{{business.reviews[1].text}} {{business.reviews[1].rating}} ☆ </br>
       </li>
     </ul>
     <div class="loading" v-if="isLoading">
@@ -20,8 +18,6 @@
 import SearchBar from "./SearchBar.vue";
 import gql from "graphql-tag";
 import { _ } from "vue-underscore";
-
-// eslint-disable-next-line
 import Router from "vue-router";
 
 export default {

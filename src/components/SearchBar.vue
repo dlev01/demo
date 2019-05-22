@@ -26,7 +26,6 @@
         title="5 digit zip code"
         v-model="zipcode"
       >
-
       <button v-on:click="searchYelp">Search</button>
     </form>
     <hr>
@@ -62,6 +61,5 @@ export default {
 };
 </script>
 
-<!-- "scoped" attribute limits CSS to this component only -->
 <style scoped>
 </style>

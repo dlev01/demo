@@ -6,8 +6,6 @@
 
 <script>
 import SearchBar from "./SearchBar.vue";
-
-// eslint-disable-next-line
 import Router from "vue-router";
 
 export default {
@@ -24,7 +22,6 @@ export default {
 };
 </script>
 
-<!-- "scoped" attribute limits CSS to this component only -->
 <style scoped>
 h1,
 h2 {

@@ -7,7 +7,6 @@ const Redis = require('ioredis')
 const redis = new Redis()
 
 const EXPIRATION = 1200 // 20 minutes
-
 const YELP_API_URL = 'https://api.yelp.com/v3/graphql'
 const YELP_API_KEY = process.env.ACCESS_TOKEN
 var app = express()
