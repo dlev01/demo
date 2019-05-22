@@ -1,17 +1,16 @@
-# YelpAround
-
-> An exercise in using Yelp's new GraphQL API.
+# stacheQL
 
 ## Technology Used
-* VueJS: Front-end framework
-* Vue-Loader: A vue component loader for webpack
-* WebPack: Dependecy management
-* Jest: Unit Testing
-* GraphQL: Yelp API access
+
+- VueJS: Front-end framework
+- Vue-Loader: A vue component loader for webpack
+- WebPack: Dependecy management
+- Jest: Unit Testing
+- GraphQL: Yelp API access
 
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 npm install --no-optional
 

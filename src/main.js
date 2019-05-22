@@ -12,27 +12,35 @@ import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+// this disables Apollo's cache-- fetchPolicy of 'network-only'
+const defaultOptions = {
+  watchQuery: {
+    fetchPolicy: 'network-only',
+    errorPolicy: 'ignore'
+  },
+  query: {
+    fetchPolicy: 'network-only',
+    errorPolicy: 'all'
+  }
+}
+
 Vue.config.productionTip = false
 
-// Add bootstrap
 Vue.use(BootstrapVue)
 
-// Add underscore
 Vue.use(underscore)
 
-// Apollo client configuration and instantiation
 const httpLink = new HttpLink({
   uri: 'http://localhost:3020/api'
 })
 
-// Create the apollo client
 const apolloClient = new ApolloClient({
   link: httpLink,
   cache: new InMemoryCache(),
-  connectToDevTools: true
+  connectToDevTools: true,
+  defaultOptions
 })
 
-// Install the vue plugin
 Vue.use(VueApollo)
 
 const apolloProvider = new VueApollo({

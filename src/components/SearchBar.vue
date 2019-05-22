@@ -1,14 +1,31 @@
 <template>
   <div class="search-bar">
     <form v-on:submit.prevent="searchYelp">
-      <input type="search" name="search-text" v-model="term">
+      <input placeholder="search" type="search" name="search-text" v-model="term">
+      <input placeholder="limit" type="search" name="limit-text" v-model="limit">
       within
-
+      <!-- <input
+        type="text"
+        name="distance"
+        pattern="[0-9]"
+        title="number in miles"
+        v-model="radius"
+      >-->
       <select name="distance" v-model="radius">
-        <option v-for="distance in distanceOptions" :value="distance">{{distance}} mile{{distance > 1 ? 's' : ''}}</option>
+        <option
+          v-for="distance in distanceOptions"
+          :value="distance"
+        >{{distance}} mile{{distance > 1 ? 's' : ''}}</option>
       </select>
       of
-      <input type="text" name="zipcode" pattern="[0-9]{5}" title="5 digit zip code" v-model="zipcode">
+      <input
+        type="text"
+        name="zipcode"
+        placeholder="enter zip"
+        pattern="[0-9]{5}"
+        title="5 digit zip code"
+        v-model="zipcode"
+      >
 
       <button v-on:click="searchYelp">Search</button>
     </form>
@@ -18,33 +35,33 @@
 
 <script>
 export default {
-  name: 'SearchBar',
-  data () {
+  name: "SearchBar",
+  data() {
     return {
-      placeholder: 'Find',
-      term: '',
-      zipcode: '',
+      placeholder: "Find",
+      term: "",
+      zipcode: "",
       radius: 0,
-      distanceOptions: [1, 3, 5, 8, 13]
-    }
+      limit: "",
+      distanceOptions: [1, 2, 3, 5, 10]
+    };
   },
   methods: {
-    searchYelp () {
+    searchYelp() {
       this.$router.push({
-        path: 'search',
+        path: "search",
         query: {
           term: this.term,
           radius: this.radius,
-          location: this.zipcode
+          location: this.zipcode,
+          limit: this.limit
         }
-      })
+      });
     }
   }
-}
+};
 </script>
 
 <!-- "scoped" attribute limits CSS to this component only -->
 <style scoped>
-
-
 </style>

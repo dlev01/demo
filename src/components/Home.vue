@@ -1,36 +1,33 @@
 <template>
   <div class="home">
     <search-bar></search-bar>
-    <h3>Or</h3>
-    <router-link to="/favorites">Go to Your Favorites</router-link>
   </div>
 </template>
 
 <script>
-import SearchBar from './SearchBar.vue'
+import SearchBar from "./SearchBar.vue";
 
 // eslint-disable-next-line
-import Router from 'vue-router'
+import Router from "vue-router";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
     SearchBar
   },
-  data () {
+  data() {
     return {
-      title: 'YelpAround',
-      subtitle: 'Find businesses around you using Yelp\'s API.'
-    }
+      title: "stacheQL",
+      subtitle: ""
+    };
   }
-}
+};
 </script>
 
 <!-- "scoped" attribute limits CSS to this component only -->
 <style scoped>
-
-h1, h2 {
+h1,
+h2 {
   font-weight: normal;
 }
-
 </style>
