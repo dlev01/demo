@@ -1,3 +1,8 @@
+const { GraphQLNormalizr } = require('graphql-normalizr');
+const { normalize } = new GraphQLNormalizr({
+  typenames: true,
+});
+
 const express = require("express");
 const request = require("request");
 const bodyParser = require("body-parser");
@@ -10,6 +15,8 @@ const EXPIRATION = 1200; // 20 minutes
 const YELP_API_URL = "https://api.yelp.com/v3/graphql";
 const YELP_API_KEY = process.env.ACCESS_TOKEN;
 var app = express();
+
+
 
 app.use(
   cors({
@@ -55,7 +62,8 @@ app.post(
           body: req.body,
         },
         (err, res, body) => {
-          resp.locals.body = JSON.stringify(body);
+          resp.locals.body = body;
+          //resp.locals.body = JSON.stringify(body);
           resp.send(body);
           next();
         }
@@ -65,7 +73,19 @@ app.post(
   (req, resp, next) => {
     console.log("@@ INSERTING INTO REDIS @@");
     console.log(Date.now() - resp.locals.start, " ms");
-    redis.set(resp.locals.query, resp.locals.body, "ex", EXPIRATION);
+    // console.log(resp.locals.body)
+    let normalizedData = normalize(resp.locals.body);
+    // console.log(normalizedData)
+    Object.keys(normalizedData).forEach(key => {
+      console.log(normalizedData[key])
+      let objects = normalizedData[key]
+      while(!Object.entries(objects[__typename])) {
+        keys = Object.keys(objects);
+        
+      }
+    })
+    
+    redis.set(resp.locals.query, JSON.stringify(normalizedData), "ex", EXPIRATION);
   }
 );
 
