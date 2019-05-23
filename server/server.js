@@ -18,6 +18,45 @@ app.use(
   })
 );
 
+const flatten = (object) => {
+  return Object.assign( {}, ...function flattener( objectBit, path = '') {
+    return [].concat(
+      ...Object.keys( objectBit ).map(
+        key => {
+          return typeof objectBit[key] === 'object' && objectBit[key] !== null ?
+          flattener( objectBit[key], `${path}.${key}`) : 
+          ( { [`${ path }.${ key }` ]: objectBit[key]});
+        }
+      )
+    )
+  }(object));
+}
+
+const denormalize = (pathsObject) => {
+  const payload = {};
+  for (let key in pathsObject) {
+    let workingObj = payload;
+    let path = key.split('.');
+    for (let i = 1; i < path.length; i += 1) {
+      const e = path[i];
+      // if we're at the end of the array, we can do the value assignment! yay!!
+      if (i === path.length - 1) workingObj[e] = pathsObject[key];
+      // only construct a sub-object if one doesn't exist with that name yet
+      if (!workingObj[e]) {
+        // if the item following this one in path array is a number, this nested object must be an array
+        if (Number(path[i + 1]) || Number(path[i + 1]) === 0) {
+          workingObj[e] = [];
+        }
+        else workingObj[e] = {};
+      }
+      // dive further into the object
+      workingObj = workingObj[e];
+    }
+  }
+  return payload;
+}
+
+
 app.use(bodyParser.json());
 
 app.post(
@@ -30,7 +69,14 @@ app.post(
         console.log("~~ERROR~~ in redis.get: ", err);
       } else if (result) {
         console.log("++RESULT++ in redis.get");
-        resp.locals.result = JSON.parse(result);
+        // resp.locals.result = JSON.parse(result);
+        // console.log(JSON.stringify(result));
+        // console.log(JSON.parse(result));
+        // console.log(JSON.stringify(result));
+        resp.locals.result = denormalize(JSON.parse(result));
+        // console.log(resp.locals.result)
+        console.log(Date.now() - resp.locals.start, " ms");
+        return resp.send(resp.locals.result)
       } else {
         console.log("==NULL== in redis.get");
         resp.locals.query = JSON.stringify(req.body);
@@ -56,7 +102,9 @@ app.post(
         },
         (err, res, body) => {
           resp.locals.body = JSON.stringify(body);
-          resp.send(body);
+          resp.locals.bodyClone = body;
+          // console.log(body.data.search.business);
+          // resp.send(body);
           next();
         }
       );
@@ -65,7 +113,17 @@ app.post(
   (req, resp, next) => {
     console.log("@@ INSERTING INTO REDIS @@");
     console.log(Date.now() - resp.locals.start, " ms");
-    redis.set(resp.locals.query, resp.locals.body, "ex", EXPIRATION);
+    console.log("@@ Normalized Data @@");
+    // const normalizedResponse = normalize(req.body, JSON.parse(resp.locals.body));\
+    let normalized = JSON.stringify(flatten(resp.locals.bodyClone));
+    let denormalized = denormalize(JSON.parse(normalized));
+    // console.log(resp.locals.body);
+    console.log(normalized);
+    console.log(denormalized);
+    resp.send(denormalized);
+    // console.log(normalized);
+    redis.set(resp.locals.query, normalized, "ex", EXPIRATION);
+    // redis.set(1, normalized, "ex", EXPIRATION);
   }
 );
 
